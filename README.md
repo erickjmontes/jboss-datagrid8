@@ -1,4 +1,4 @@
-Role Name
+Jboss Datagrid Role
 =========
 
 A brief description of the role goes here.

@@ -8,11 +8,15 @@
         url: https://"{{ satellite_register_url }}"/pub/katello-ca-consumer-latest.noarch.rpm
         dest: /tmp/katello-ca-consumer-latest.noarch.rpm
         mode: 0644
+      tags:
+        - satellite
 
     - name: Install the katello-ca-consumer-latest.noarch.rpm
       yum:
         name: /tmp/katello-ca-consumer-latest.noarch.rpm
         state: present
+      tags:
+        - satellite
     
     - name: Register as user credentials into given environment (against Red Hat Satellite 6.x), and auto-subscribe.
       community.general.redhat_subscription:
@@ -21,14 +25,20 @@
         org_id: "{{ satellite_register_orgid }}"
         environment: "{{ satellite_register_envirorment }}"
         auto_attach: true
+      tags:
+        - satellite
 
     - name: Install OpenJDK "{{ openjdk_version }}"
       yum:
         name: java-"{{ openjdk_version }}"-openjdk-devel
         state: present
+      tags:
+        - setup
 
     - name: Check java version selected
       community.general.alternatives:
         name: java
         path: /usr/lib/jvm/jre-"{{ openjdk_version }}"-openjdk.x86_64/bin/java
+      tags:
+        - setup
         
