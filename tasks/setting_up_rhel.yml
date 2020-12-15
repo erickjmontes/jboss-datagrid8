@@ -1,0 +1,34 @@
+---
+# tasks file for rhel configuration
+
+ tasks:
+
+    - name: Download katello client from Satellite
+      get_url:
+        url: https://"{{ satellite_register_url }}"/pub/katello-ca-consumer-latest.noarch.rpm
+        dest: /tmp/katello-ca-consumer-latest.noarch.rpm
+        mode: 0644
+
+    - name: Install the katello-ca-consumer-latest.noarch.rpm
+      yum:
+        name: /tmp/katello-ca-consumer-latest.noarch.rpm
+        state: present
+    
+    - name: Register as user credentials into given environment (against Red Hat Satellite 6.x), and auto-subscribe.
+      community.general.redhat_subscription:
+        state: present
+        activationkey: "{{ satellite_register_activationkey }}"
+        org_id: "{{ satellite_register_orgid }}"
+        environment: "{{ satellite_register_envirorment }}"
+        auto_attach: true
+
+    - name: Install OpenJDK "{{ openjdk_version }}"
+      yum:
+        name: java-"{{ openjdk_version }}"-openjdk-devel
+        state: present
+
+    - name: Check java version selected
+      community.general.alternatives:
+        name: java
+        path: /usr/lib/jvm/jre-"{{ openjdk_version }}"-openjdk.x86_64/bin/java
+        
