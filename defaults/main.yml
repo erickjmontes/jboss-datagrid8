@@ -1,2 +1,4 @@
 ---
 # defaults file for datagrid
+datagrid_install_path: /opt/
+datagrid_path: /opt/redhat-datagrid-8.0.0-server

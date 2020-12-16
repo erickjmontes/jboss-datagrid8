@@ -1,2 +1,35 @@
 ---
 # tasks file for datagrid
+
+#- name: Create datagrid directory 
+#  file:
+#    path: /opt/datagrid
+#    state: directory
+#    mode: '0755'
+#  tags:
+#    - datagrid
+
+- name: unzip datagrid server files
+  unarchive:
+    src: "{{ datagrid_zipfile }}"
+    dest: /opt/
+  tags:
+    - datagrid
+
+- name: copy over the datagrid configuration and script files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '0744'
+  with_items:
+    - {src: '../templates/start.sh.j2', dest: '{{ datagrid_path}}/bin/start.sh'} 
+    - {src: '../templates/stop.sh.j2', dest: '{{ datagrid_path}}/bin/stop.sh'}
+  tags:
+    - datagrid
+    - template
+
+
+    
+
