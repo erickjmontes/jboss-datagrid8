@@ -1,22 +1,21 @@
 ---
 # tasks file for datagrid
-
-#- name: Create datagrid directory 
-#  file:
-#    path: /opt/datagrid
-#    state: directory
-#    mode: '0755'
-#  tags:
-#    - datagrid
-
-- name: unzip datagrid server files
-  unarchive:
-    src: "{{ datagrid_zipfile }}"
-    dest: /opt/
+- name: Crea directorio base
+  file:
+    path: "{{ datagrid_install_path }}"
+    state: directory
+    mode: '0755'
   tags:
     - datagrid
 
-- name: copy over the datagrid configuration and script files
+- name: unzip de los archivos
+  unarchive:
+    src: "{{ datagrid_zipfile }}"
+    dest: "{{ datagrid_install_path }}"
+  tags:
+    - datagrid
+
+- name: Copia la configuracion y los script de inicio
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -26,10 +25,14 @@
   with_items:
     - {src: '../templates/start.sh.j2', dest: '{{ datagrid_path}}/bin/start.sh'} 
     - {src: '../templates/stop.sh.j2', dest: '{{ datagrid_path}}/bin/stop.sh'}
+    - {src: '../templates/infinispan.xml.j2', dest: '{{ datagrid_path}}/server/conf/infinispan.xml'}
   tags:
     - datagrid
     - template
 
-
-    
+- name: Ejecuta el script de inicio start.sh
+  command: "nohup '{{ datagrid_path}}/bin/start.sh' &" 
+  tags:
+    - datagrid
+    - run
 

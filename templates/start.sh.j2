@@ -1,21 +1,9 @@
 #!/bin/sh
-umask 022
-export JAVA_HOME={{ openjdk_path }}
-export JAVA_OPTS="-Xms2048M -Xmx2048M -XX:+UseG1GC-XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError"
-TZ=GMT-3 ; export TZ
-export LC_CTYPE="es_AR.ISO8859-1"
-export LC_NUMERIC="es_AR.ISO8859-1"
-# export LC_TIME="es_AR.ISO8859-1"
-export LC_COLLATE="es_AR.ISO8859-1"
-export LC_MONETARY="es_AR.ISO8859-1"
-export LC_MESSAGES="es_AR.ISO8859-1"
-export Host=`hostname`
+#umask 022
+#export JAVA_OPTS="-Xms2048M -Xmx2048M -XX:+HeapDumpOnOutOfMemoryError"
+#export INFINISPAN_BIND_ADDRESS="{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+export INFINISPAN_CLUSTER_NAME='Santander'
 
 # Start Normal
-echo "#######JBOSS 7  $Host  --Master##"
-{{ datagrid_path }}/bin/domain.sh -b ​{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}
--Djboss.bind.address.management={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address']}} --host-config=host-master.xml-Djboss.default.jgroups.stack=tcp > /dev/null &
-
-# Start con Logs
-# {{ datagrid_path }}/bin/domain.sh -b ​{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}
--Djboss.bind.address.management={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address']}} --host-config=host-master.xml-Djboss.default.jgroups.stack=tcp &
+echo "####### Datagrid 8 Cluster mode "{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}" #######"
+{{ datagrid_path }}/bin/server.sh -c infinispan.xml --cluster-stack=uat -b {{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}} > /dev/null &

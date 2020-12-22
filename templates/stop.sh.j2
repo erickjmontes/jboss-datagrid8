@@ -1,5 +1,3 @@
 #!/bin/sh
-Host=`hostname`
-export JAVA_HOME=/opt/prisma/java1.8
-echo "###JBOSS7-Master $Host  stop###"
-/opt/prisma/jboss-datagrid-7.3.1-dc/bin/cli.sh --connect--controller=​10.123.3.188​:9999 /host=​master-jdg​:shutdown
+echo "### Datagrid 8 Cluster mode "{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}" stop ###"
+{{ datagrid_path }}/bin/cli.sh -c {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:11222 -f - <<< "shutdown cluster"

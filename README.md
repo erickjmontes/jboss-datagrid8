@@ -1,12 +1,15 @@
 Jboss Datagrid Role
 =========
 
-A brief description of the role goes here.
+Un rol para el aprovisionamiento de las maquinas virtuales para JBoss Datagrid.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+* unzip
+* openjdk
+
+Nuestro playbook provee esas dependencias en el rol "vm provisioner"
 
 Role Variables
 --------------
