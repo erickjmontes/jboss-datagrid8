@@ -1,41 +1,44 @@
-Jboss Datagrid Role
+Rol Jboss Datagrid 
 =========
 
-Un rol para el aprovisionamiento de las maquinas virtuales para JBoss Datagrid.
+Instalacion de JBoss Datagrid 8 en RHEL.
 
-Requirements
+Requisitos
 ------------
 
-* unzip
-* openjdk
+Red Hat Subscription.
 
-Nuestro playbook provee esas dependencias en el rol "vm provisioner"
-
-Role Variables
+Variables del rol
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Name 	Default Value 	Description
+`` 	``
+datagrid_zipfile  "../redhat-datagrid-8.0.0-server.zip"   Ruta del archivo zip de instalacion
+datagrid_install_path "/APLICACIONES/DATAGRID/"   Ruta de instalacion de Datagrid
+datagrid_path "/APLICACIONES/DATAGRID/redhat-datagrid-8.0.0-server" Ruta completa al server path de Datagrid
+packages_to_install "[gzip, java-1.8.0-openjdk-devel]"    Lista con los paquetes necesarios a instalar
+service_user_uid  "9403"  uid del usuario de servicio en systemd para Datagrid
 
-Dependencies
+Dependencias
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Paquetes:
+* unzip
+* java-1.8.0-openjdk
 
-Example Playbook
-----------------
+Nuestro playbook provee esas dependencias en tasks/setup.yml
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Playbook de ejemplo
+-------------------
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+    - hosts: datagrid
 
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+      roles: 
+        - jboss_datagrid
+      vars:
+        datagrid_zipfile: ../redhat-datagrid-8.0.0-server.zip
+        datagrid_install_path: /APLICACIONES/DATAGRID/
+        datagrid_path: /APLICACIONES/DATAGRID/redhat-datagrid-8.0.0-server
+        packages_to_install:
+            - java-1.8.0-openjdk-devel
+            - unzip

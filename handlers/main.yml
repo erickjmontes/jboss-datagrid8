@@ -1,2 +1,25 @@
 ---
 # handlers file for datagrid
+- name: Enable datagrid
+  service:
+    name: datagrid
+    enabled: yes 
+  tags:
+    - datagrid
+    - enable
+
+- name: Start datagrid
+  service:
+    name: datagrid
+    state: started
+  tags:
+    - datagrid
+    - start
+
+- name: Stop datagrid
+  service:
+    name: datagrid
+    state: stopped 
+  tags: 
+    - datagrid
+    - stop

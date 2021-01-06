@@ -1,0 +1,19 @@
+---
+
+- name: Instalacion de paquetes
+  package:
+    name: "{{ packages_to_install }}"
+    state: present
+  register: packages_result
+  retries: 5
+  until: packages_result is success
+  tags:
+    - setup
+
+- name: Creacion del usuario de servicio
+  user:
+    name: datagrid
+    comment: Usuario de servicio para Datagrid
+    uid: "{{service_user_uid}}"
+
+      

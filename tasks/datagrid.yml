@@ -1,0 +1,46 @@
+---
+- name: Creacion del directorio base "{{ datagrid_install_path }}"
+  file:
+    path: "{{ datagrid_install_path }}"
+    state: directory
+    mode: '0755'
+    owner: datagrid
+    group: datagrid
+  tags:
+    - datagrid
+
+- name: Instalacion de los archivos de Datagrid "{{ datagrid_zipfile }}"
+  unarchive:
+    src: "{{ datagrid_zipfile }}"
+    dest: "{{ datagrid_install_path }}"
+    owner: datagrid
+    group: datagrid
+  tags:
+    - datagrid
+
+- name: Set de los permisos SELinux para datagrid
+  sefcontext:
+    target: "{{datagrid_path}}/bin/start.sh"
+    setype: bin_t
+    
+- name: Reload de las politicas de SELinux 
+  command: restorecon -irv "{{datagrid_path}}"
+
+- name: Copia de la configuracion y los scripts
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: datagrid
+    group: datagrid
+    mode: '0744'
+  with_items:
+    - {src: '../templates/start.sh.j2', dest: '{{ datagrid_path}}/bin/start.sh'} 
+    - {src: '../templates/stop.sh.j2', dest: '{{ datagrid_path}}/bin/stop.sh'}
+    - {src: '../templates/infinispan.xml.j2', dest: '{{ datagrid_path}}/server/conf/infinispan.xml'}
+    - {src: '../templates/datagrid.service.j2', dest: '/etc/systemd/system/datagrid.service'}
+  notify:
+    - Enable datagrid
+    - Start datagrid 
+  tags:
+    - datagrid
+    - template

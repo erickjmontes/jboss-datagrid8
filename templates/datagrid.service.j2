@@ -1,0 +1,12 @@
+[Unit]
+Description=Datagrid service
+
+[Service]
+ExecStart={{datagrid_path}}/bin/start.sh
+ExecStop={{datagrid_path}}/bin/stop.sh
+Type=forking
+User=datagrid
+Group=datagrid
+
+[Install]
+WantedBy=multi-user.target

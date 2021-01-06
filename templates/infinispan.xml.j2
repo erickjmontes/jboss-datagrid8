@@ -5,9 +5,7 @@
     <stack name="uat">
       <TCP bind_port="7800" />
       <TCPPING 
-           initial_hosts="{% for host in groups['aws_servers'] %} 
-            {{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}[7800] {% if not loop.last %},{% endif %}
-          {% endfor %}"
+           initial_hosts="{% for host in groups['datagrid'] %}{{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}[7800]{% if not loop.last %},{% endif %}{% endfor %}"
            port_range="1"
            />
       <MERGE3 />
