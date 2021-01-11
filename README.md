@@ -28,7 +28,7 @@ Variables del rol
 --------------
 
 Name 	Default Value 	Description
-`` 	``
+`` 	``  ``
 datagrid_zipfile  "../redhat-datagrid-8.0.0-server.zip"   Ruta del archivo zip de instalacion
 datagrid_install_path "/APLICACIONES/DATAGRID/"   Ruta de instalacion de Datagrid
 datagrid_path "/APLICACIONES/DATAGRID/redhat-dathagrid-8.0.0-server" Ruta completa al server path de Datagrid
@@ -48,16 +48,16 @@ Nuestro playbook provee esas dependencias en tasks/setup.yml
 Playbook de ejemplo
 -------------------
 
-  - hosts: datagrid
+    - hosts: datagrid
 
-    roles: 
-        - jboss_datagrid
-    vars:
-        datagrid_zipfile: ../redhat-datagrid-8.0.0-server.zip
-        datagrid_install_path: /APLICACIONES/DATAGRID/
-        datagrid_path: /APLICACIONES/DATAGRID/redhat-datagrid-8.0.0-server
-        packages_to_install:
-            - java-1.8.0-openjdk-devel
-            - unzip
-        service_user_uid:
-        cache_name: sso
+        roles: 
+            - jboss_datagrid
+        vars:
+            datagrid_zipfile: ../redhat-datagrid-8.0.0-server.zip
+            datagrid_install_path: /APLICACIONES/DATAGRID/
+            datagrid_path: /APLICACIONES/DATAGRID/redhat-datagrid-8.0.0-server
+            packages_to_install:
+                - java-1.8.0-openjdk-devel
+                - unzip
+            service_user_uid:
+            cache_name: sso
