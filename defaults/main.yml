@@ -1,2 +1,3 @@
 ---
 # defaults file for datagrid
+cache_name: sso

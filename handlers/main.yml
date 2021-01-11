@@ -16,6 +16,15 @@
     - datagrid
     - start
 
+- name: Restart datagrid
+  service:
+    name: datagrid
+    state: restarted
+  tags:
+    - datagrid
+    - start
+
+
 - name: Stop datagrid
   service:
     name: datagrid
