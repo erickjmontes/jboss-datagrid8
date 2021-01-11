@@ -16,14 +16,12 @@
     comment: Usuario de servicio para Datagrid
     uid: "{{service_user_uid}}"
 
-- name: Creando fact "Clusters"
-  set_fact: 
+- set_fact: 
     clusters: '{{ groups | select("match", "cluster_*") |list }}'
   tags:
     - facts
 
-- name: Creando fact "Opposite cluster"
-  set_fact:
-    opposite_cluster: '{{ clusters | difference(group_names[0]) }}'
+- set_fact:
+    other_cluster: '{{ clusters | difference(group_names[0]) }}'
   tags:
     - facts

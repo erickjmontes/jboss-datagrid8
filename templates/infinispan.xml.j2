@@ -6,11 +6,32 @@
 
    <jgroups>
     <!-- Add JGroups stacks for Infinispan clustering. -->
-    <stack name="uat">
+    <stack name="global">
+      <TCP bind_port="7900" bind_addr="{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"/>
+      <TCPPING 
+         initial_hosts="{% for host in groups['datagrid'] %}{{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}[7800]{% if not loop.last %},{% endif %}{% endfor %}"
+         port_range="0"
+      />
+      <MERGE3 />
+      <FD_SOCK />
+      <FD_ALL timeout="3000" interval="1000" timeout_check_interval="1000" />
+      <VERIFY_SUSPECT timeout="1000" />
+      <pbcast.NAKACK2 use_mcast_xmit="false" xmit_interval="100" xmit_table_num_rows="50"
+                      xmit_table_msgs_per_row="1024" xmit_table_max_compaction_time="30000" />
+      <UNICAST3 xmit_interval="100" xmit_table_num_rows="50" xmit_table_msgs_per_row="1024"
+                xmit_table_max_compaction_time="30000" />
+      <pbcast.STABLE stability_delay="200" desired_avg_gossip="2000" max_bytes="1M" />
+      <pbcast.GMS print_local_addr="false" join_timeout="${jgroups.join_timeout:2000}" />
+      <UFC_NB max_credits="3m" min_threshold="0.40" />
+      <MFC_NB max_credits="3m" min_threshold="0.40" />
+      <FRAG2 />
+    </stack>
+    
+    <stack name="{{group_names[0]}}">
       <TCP bind_port="7800" bind_addr="{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"/>
       <TCPPING 
-           initial_hosts="{% for host in groups['datagrid'] %}{{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}[7800]{% if not loop.last %},{% endif %}{% endfor %}"
-           port_range="1"
+           initial_hosts="{% for host in groups[group_names[0]] %}{{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}[7800]{% if not loop.last %},{% endif %}{% endfor %}"
+           port_range="0"
            />
       <MERGE3 />
       <FD_SOCK />
@@ -26,21 +47,23 @@
       <MFC_NB max_credits="3m" min_threshold="0.40" />
       <FRAG2 />
     </stack>
-    <stack name="xsite" extends="uat">
+    
+    <stack name="xsite" extends="global">
       <relay.RELAY2 site="{{ group_names[0] }}" xmlns="urn:org:jgroups" max_site_masters="16"/>
-      <remote-sites default-stack="uat">
+      <remote-sites default-stack="{{group_names[0]}}">
       {%- for cluster in clusters %}
          <remote-site name="{{cluster}}"/>
       {%- endfor %}
       </remote-sites>
     </stack>
+
    </jgroups>
 
    <cache-container name="default" statistics="true">
       <transport cluster="{{ group_names[0] }}" stack="xsite"/>
       <distributed-cache name="{{ cache_name }}">
          <backups>
-            <backup site="{{opposite_cluster[0]}}" strategy="SYNC" />
+            <backup site="{{other_cluster[0]}}" strategy="SYNC" />
          </backups>
       </distributed-cache>
    </cache-container>
