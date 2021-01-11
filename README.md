@@ -34,6 +34,7 @@ datagrid_install_path "/APLICACIONES/DATAGRID/"   Ruta de instalacion de Datagri
 datagrid_path "/APLICACIONES/DATAGRID/redhat-dathagrid-8.0.0-server" Ruta completa al server path de Datagrid
 packages_to_install "[gzip, java-1.8.0-openjdk-devel]"    Lista con los paquetes necesarios a instalar
 service_user_uid  "9403"  uid del usuario de servicio en systemd para Datagrid
+cache_name  "sso"   Nombre de la cache a generar
 
 Dependencias
 ------------
@@ -47,14 +48,16 @@ Nuestro playbook provee esas dependencias en tasks/setup.yml
 Playbook de ejemplo
 -------------------
 
-    - hosts: datagrid
+  - hosts: datagrid
 
-      roles: 
+    roles: 
         - jboss_datagrid
-      vars:
+    vars:
         datagrid_zipfile: ../redhat-datagrid-8.0.0-server.zip
         datagrid_install_path: /APLICACIONES/DATAGRID/
         datagrid_path: /APLICACIONES/DATAGRID/redhat-datagrid-8.0.0-server
         packages_to_install:
             - java-1.8.0-openjdk-devel
             - unzip
+        service_user_uid:
+        cache_name: sso
