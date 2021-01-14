@@ -1,9 +1,4 @@
 #!/bin/sh
-#umask 022
-#export JAVA_OPTS="-Xms2048M -Xmx2048M -XX:+HeapDumpOnOutOfMemoryError"
-#export INFINISPAN_BIND_ADDRESS="{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-export INFINISPAN_CLUSTER_NAME='Santander'
 
-# Start Normal
 echo "####### Datagrid 8 Cluster mode "{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}" #######"
 {{ datagrid_path }}/bin/server.sh -c infinispan.xml --cluster-stack={{group_names[0]}} -b {{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}} > /dev/null &

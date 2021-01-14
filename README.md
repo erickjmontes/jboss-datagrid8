@@ -64,3 +64,15 @@ Playbook de ejemplo
                 - unzip
             service_user_uid:
             cache_name: sso
+
+
+License
+-------
+
+Apache License
+Version 2.0
+
+Author Information
+------------------
+
+https://nalabs.io/

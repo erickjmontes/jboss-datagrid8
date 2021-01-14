@@ -1,3 +1,4 @@
 #!/bin/sh
+
 echo "### Datagrid 8 Cluster mode "{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}" stop ###"
 {{ datagrid_path }}/bin/cli.sh -c {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:11222 -f - <<< "shutdown cluster"

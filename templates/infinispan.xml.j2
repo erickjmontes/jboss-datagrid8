@@ -7,7 +7,7 @@
    <jgroups>
     <!-- Add JGroups stacks for Infinispan clustering. -->
     <stack name="global">
-      <TCP bind_port="7900" bind_addr="{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"/>
+      <TCP bind_port="7900" bind_addr="{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"/>
       <TCPPING 
          initial_hosts="{% for host in groups['datagrid'] %}{{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}[7900]{% if not loop.last %},{% endif %}{% endfor %}"
          port_range="0"
@@ -27,8 +27,8 @@
       <FRAG2 />
     </stack>
     
-    <stack name="{{group_names[0]}}">
-      <TCP bind_port="7800" bind_addr="{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"/>
+    <stack name="{{ group_names[0] }}">
+      <TCP bind_port="7800" bind_addr="{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"/>
       <TCPPING 
            initial_hosts="{% for host in groups[group_names[0]] %}{{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}[7800]{% if not loop.last %},{% endif %}{% endfor %}"
            port_range="0"
@@ -48,11 +48,11 @@
       <FRAG2 />
     </stack>
     
-    <stack name="xsite" extends="{{group_names[0]}}">
+    <stack name="xsite" extends="{{group_names[0] }}">
       <relay.RELAY2 site="{{ group_names[0] }}" xmlns="urn:org:jgroups" max_site_masters="16"/>
       <remote-sites default-stack="global">
       {%- for cluster in clusters %}
-         <remote-site name="{{cluster}}"/>
+         <remote-site name="{{ cluster }}"/>
       {%- endfor %}
       </remote-sites>
     </stack>
@@ -63,7 +63,7 @@
       <transport cluster="{{ group_names[0] }}" stack="xsite"/>
       <distributed-cache name="{{ cache_name }}">
          <backups>
-            <backup site="{{other_cluster[0]}}" strategy="SYNC" />
+            <backup site="{{ other_cluster[0]  }}" strategy="SYNC" />
          </backups>
       </distributed-cache>
    </cache-container>
@@ -71,7 +71,7 @@
    <server xmlns="urn:infinispan:server:10.0">
       <interfaces>
          <interface name="public">
-            <inet-address value="${infinispan.bind.address:{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}}"/>
+            <inet-address value="${infinispan.bind.address:{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}}"/>
          </interface>
       </interfaces>
 
