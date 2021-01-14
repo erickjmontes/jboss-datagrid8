@@ -51,7 +51,7 @@ Nuestro playbook provee esas dependencias en tasks/setup.yml
 Playbook de ejemplo
 -------------------
 
-    - hosts: datagrid
+      - hosts: datagrid
 
         roles: 
             - jboss_datagrid
